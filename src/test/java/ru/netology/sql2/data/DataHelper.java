@@ -1,5 +1,6 @@
 package ru.netology.sql2.data;
 
+import lombok.Data;
 import lombok.Value;
 
 import java.sql.DriverManager;
@@ -29,7 +30,8 @@ public class DataHelper {
         private String code;
     }
 
-    public static VerificationCode getLastVerificationCode() {
+
+    public static String getLastVerificationCode() {
         var countSQL = "select code from auth_codes order by created desc limit 1;";
         try (
                 var conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/app", "app", "pass");
@@ -38,13 +40,13 @@ public class DataHelper {
             try (var rs = countStmt.executeQuery(countSQL)) {
                 if (rs.next()) {
                     var count = rs.getString(1);
-                    return new VerificationCode(count);
+                    return count;
                 }
             }
         } catch (Exception e) {
             System.out.println(e);
         }
-        return new VerificationCode("0");
+        return "0";
     }
 
     public static void cleanUP() {
@@ -60,6 +62,13 @@ public class DataHelper {
         } catch (Exception e) {
             System.out.println(e);
         }
+    }
+
+    @Data
+    public static class Card {
+        private String id;
+        private String number;
+        private int balance;
     }
 
 

@@ -7,16 +7,9 @@ import io.restassured.specification.RequestSpecification;
 import ru.netology.sql2.data.DataHelper;
 
 import static io.restassured.RestAssured.given;
+import static ru.netology.sql2.api.ApiHelper.requestSpec;
 
 public class AuthApi {
-    private static final RequestSpecification requestSpec = new RequestSpecBuilder()
-            .setBaseUri("http://localhost")
-            .setPort(9999)
-            .setAccept(ContentType.JSON)
-            .setContentType(ContentType.JSON)
-            .log(LogDetail.ALL)
-            .build();
-
 
     public static void login(DataHelper.AuthInfo authInfo) {
         given() // "дано"
