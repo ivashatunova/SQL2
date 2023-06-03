@@ -1,6 +1,7 @@
 package ru.netology.sql2.test;
 
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.netology.sql2.api.AuthApi;
 import ru.netology.sql2.api.CardsApi;
@@ -12,13 +13,22 @@ import static io.restassured.RestAssured.given;
 public class ApiTest {
     @Test
     void testAuthorization() {
-        // Шаг 1: Логин
+        DataHelper.AuthInfo authInfo = DataHelper.getAuthInfo();
+        AuthApi.login(authInfo);
+        DataHelper.VerificationInfo verificationInfo = new DataHelper.VerificationInfo(authInfo.getLogin(), DataHelper.getLastVerificationCode());
+        String token = AuthApi.verification(verificationInfo);
+    }
+    @Test
+    void testGetCards() {
         DataHelper.AuthInfo authInfo = DataHelper.getAuthInfo();
         AuthApi.login(authInfo);
         DataHelper.VerificationInfo verificationInfo = new DataHelper.VerificationInfo(authInfo.getLogin(), DataHelper.getLastVerificationCode());
         String token = AuthApi.verification(verificationInfo);
         var cards = CardsApi.getCards(token);
-        System.out.println(cards);
+        Assertions.assertNotEquals(0, cards.length);
+        Assertions.assertNotNull(cards[0].getId());
+        Assertions.assertNotNull(cards[0].getNumber());
+        Assertions.assertNotEquals(0,cards[0].getBalance());
     }
 
 
