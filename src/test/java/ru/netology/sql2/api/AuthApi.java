@@ -32,8 +32,8 @@ public class AuthApi {
                 .extract()
                 .path("token");
         return token;
-
     }
+
 
 
 }

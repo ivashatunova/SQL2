@@ -71,5 +71,16 @@ public class DataHelper {
         private int balance;
     }
 
+    @Value
+    public static class TransferInfo {
+        private String from;
+        private String to;
+        private int  amount;
+    }
+
+    public static String card1Info = "5559 0000 0000 0001";
+   public static String card2Info= "5559 0000 0000 0002";
+
+
 
 }

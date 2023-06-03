@@ -18,5 +18,14 @@ public class CardsApi {
         return cards;
     }
 
+    public static int getBalance(String cardNumber, DataHelper.Card[] cards) {
+        for (int i = 0; i < cards.length; i++) {
+            if (cards[i].getNumber().substring(14).equals(cardNumber.substring(14))) {
+                return cards[i].getBalance();
+            }
+        }
+        throw new RuntimeException("Card " + cardNumber + " not found");
+    }
+
 
 }
