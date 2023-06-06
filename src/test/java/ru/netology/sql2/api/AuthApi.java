@@ -21,6 +21,16 @@ public class AuthApi {
                 .statusCode(200); // код 200 OK
     }
 
+    public static void notLogin(DataHelper.AuthInfo authInfo) {
+        given() // "дано"
+                .spec(requestSpec) // указываем, какую спецификацию используем
+                .body(authInfo) // передаём в теле объект, который будет преобразован в JSON
+                .when() // "когда"
+                .post("/api/auth") // на какой путь относительно BaseUri отправляем запрос
+                .then() // "тогда ожидаем"
+                .statusCode(400); // код 200 OK
+    }
+
     public static String verification(DataHelper.VerificationInfo verificationInfo) {
         String token = given() // "дано"
                 .spec(requestSpec) // указываем, какую спецификацию используем
@@ -34,6 +44,16 @@ public class AuthApi {
         return token;
     }
 
+    public static void notVerification(DataHelper.VerificationInfo verificationInfo) {
+        given() // "дано"
+                .spec(requestSpec) // указываем, какую спецификацию используем
+                .body(verificationInfo) // передаём в теле объект, который будет преобразован в JSON
+                .when() // "когда"
+                .post("/api/auth/verification") // на какой путь относительно BaseUri отправляем запрос
+                .then() // "тогда ожидаем"
+                .statusCode(400); // код 200 OK
+
+    }
 
 
 }

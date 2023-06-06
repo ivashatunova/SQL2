@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.Value;
 
 import java.sql.DriverManager;
+import java.util.Random;
 
 public class DataHelper {
     private DataHelper() {
@@ -20,8 +21,12 @@ public class DataHelper {
         return new AuthInfo("vasya", "qwerty123");
     }
 
-    public static AuthInfo getOtherAuthInfo(AuthInfo original) {
+    public static AuthInfo getOtherAuthInfo() {
         return new AuthInfo("petya", "123qwerty");
+    }
+
+    public static AuthInfo getWrongAuthInfo() {
+        return new AuthInfo("Wrong", "123qwerty");
     }
 
     @Value
@@ -49,6 +54,30 @@ public class DataHelper {
         return "0";
     }
 
+    public static String getWrongVerificationCode() {
+        Random random = new Random();
+        while (true) {
+            String randomNumber = String.valueOf(random.nextInt(900000) + 100000);
+
+            var sql = "select code from auth_codes where code='" + randomNumber+ "';";
+            try (
+                    var connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/app", "app", "pass");
+                    var stmt = connection.createStatement();
+            ) {
+                try (var rs = stmt.executeQuery(sql)) {
+                    if (!rs.next()) {
+                        // Результат пустой
+                        return randomNumber;
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
+
+    }
+
+
     public static void cleanUP() {
         var countSQL1 = "delete from auth_codes;";
         var countSQL2 = "delete from cards;";
@@ -75,12 +104,11 @@ public class DataHelper {
     public static class TransferInfo {
         private String from;
         private String to;
-        private int  amount;
+        private int amount;
     }
 
     public static String card1Info = "5559 0000 0000 0001";
-   public static String card2Info= "5559 0000 0000 0002";
-
+    public static String card2Info = "5559 0000 0000 0002";
 
 
 }
